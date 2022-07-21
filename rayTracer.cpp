@@ -1,8 +1,6 @@
 #include "circle.cpp"
 #include "sphere.cpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 
 class rayTracer {
@@ -135,7 +133,7 @@ private:
 int main() {
   rayTracer window(600, "Sphere");
 
-  Circle sphere;
+  Sphere sphere;
   sphere.setRadius(0.5f);
   sphere.setImageSize(600);
   sphere.setCameraPosition(0.f, 0.f, 1.f);
