@@ -1,35 +1,40 @@
-#include "renderer.cpp"
-#include "utils.cpp"
+#include "sphere.hpp"
+#include "object.hpp"
+#include "ray.hpp"
+#include "utils.hpp"
 
-class Sphere : public Renderer {
-private:
-  float radius;
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <iostream>
 
-public:
-  Sphere() : Renderer() {}
-  Sphere(float r) : Renderer() { radius = r; }
+Sphere::Sphere() : Object() {}
 
-  void setRadius(float r) { radius = r; }
+Sphere::Sphere(float r) : Object() { radius = r; }
 
-  sf::Uint32 drawPixel(sf::Vector3<float> rayDirection) const {
-    float a = dot(rayDirection, rayDirection);
-    float b = 2.f * dot(rayDirection, camera);
-    float c = dot(camera, camera) - radius * radius;
+void Sphere::setRadius(float r) { radius = r; }
 
-    float discriminant = b * b - 4 * a * c;
+bool Sphere::didIntersect(Ray &shootingRay, sf::Vector3f &hitposition,
+                          sf::Vector3f &normal, unsigned int &color) {
 
-    if (discriminant < 0.f)
-      return 0x000000ff;
+  float a = dot(shootingRay.m_direction, shootingRay.m_direction);
+  float b = 2.f * dot(shootingRay.m_direction, shootingRay.m_origin);
+  float c = dot(shootingRay.m_origin, shootingRay.m_origin) - radius * radius;
 
-    // If it hits the sphere
-    float t[] = {(-b + std::sqrt(discriminant)) / (2.f * a),
-                 (-b - std::sqrt(discriminant)) / (2.f * a)};
+  float discriminant = b * b - 4 * a * c;
 
-    float dist = std::min(t[0], t[1]); // closest one to the camera
+  if (discriminant < 0)
+    return false;
 
-    sf::Vector3<float> hitposition = camera + rayDirection * dist;
-    hitposition = normalize(hitposition); // normal at that point
-    float lightIntensity = std::max(dot(hitposition, -light), 0.f);
-    return 0xaaaaaa00 | (int(255 * lightIntensity));
-  }
-};
+  // Calculate the hitposition
+  float s_dis = std::sqrt(discriminant);
+  float t[] = {(-b + s_dis) / (2.f * a), (-b - s_dis) / (2.f * a)};
+
+  // If either one is less part of sphere is behind the camera
+  if (t[0] < 0 || t[1] < 0)
+    return false;
+
+  float tmin = std::min(t[0], t[1]);
+  hitposition = shootingRay.m_origin + shootingRay.m_direction * tmin;
+
+  return true;
+}
