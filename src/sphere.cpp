@@ -35,6 +35,7 @@ bool Sphere::didIntersect(Ray &shootingRay, sf::Vector3f &hitposition,
 
   float tmin = std::min(t[0], t[1]);
   hitposition = shootingRay.m_origin + shootingRay.m_direction * tmin;
+  normal = normalize(hitposition);
 
   return true;
 }

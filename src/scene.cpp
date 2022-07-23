@@ -30,6 +30,7 @@ void scene::render(image *Image) {
   Ray ray;
   sf::Vector3f hitposition, normal;
   unsigned int color;
+  float intensity;
 
   float xF = 2.f / (size.x - 1); // range is from 0 to size - 1
   float yF = 2.f / (size.y - 1);
@@ -45,9 +46,14 @@ void scene::render(image *Image) {
         bool intersect = obj->didIntersect(ray, hitposition, normal, color);
 
         if (intersect) {
-          float dist = magnitude(ray.m_origin - hitposition);
-          int r = 255 - 255 * (dist - 2.f) / 0.82843;
-          Image->setPixel(x, y, 0x000000ff | (r << 24));
+          bool illum =
+              m_light.calcIlluminance(hitposition, normal, color, intensity);
+          if (illum) {
+            int r = 255 - 255 * intensity;
+            Image->setPixel(x, y, 0x000000ff | (r << 24));
+          } else {
+            Image->setPixel(x, y, 0x000000ff);
+          }
         } else {
           Image->setPixel(x, y, 0x000000ff);
         }

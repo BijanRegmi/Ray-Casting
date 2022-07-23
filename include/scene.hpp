@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "image.hpp"
+#include "light.hpp"
 #include "object.hpp"
 #include "sphere.hpp"
 #include <SFML/Graphics.hpp>
@@ -11,6 +12,7 @@ private:
   sf::RenderTexture m_texture;
   Camera m_camera;
   std::vector<std::shared_ptr<Object>> objects;
+  light m_light;
 
 public:
   scene();
