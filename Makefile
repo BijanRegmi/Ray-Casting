@@ -2,7 +2,7 @@
 CC = g++
 
 # Compiler flags
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Ofast
 
 # Executable
 EXEC = rayTrace
