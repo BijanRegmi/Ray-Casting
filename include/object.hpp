@@ -9,7 +9,6 @@ public:
   Object();
   virtual ~Object();
 
-protected:
   virtual bool didIntersect(Ray &shootingRay, sf::Vector3f &hitposition,
                             sf::Vector3f &normal, unsigned int &color) = 0;
 };

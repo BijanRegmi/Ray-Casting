@@ -1,13 +1,16 @@
 #include "camera.hpp"
 #include "image.hpp"
+#include "object.hpp"
 #include "sphere.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
+#include <vector>
 
 class scene : public sf::Sprite {
 private:
   sf::RenderTexture m_texture;
   Camera m_camera;
-  Sphere sphere;
+  std::vector<std::shared_ptr<Object>> objects;
 
 public:
   scene();
