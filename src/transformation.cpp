@@ -61,25 +61,25 @@ void Transformation::increase_translate(float translate_amt, bool x, bool y,
 void Transformation::increase_rotation(float rotation_angle, bool x, bool y,
                                        bool z) {
   if (x)
-    T[0] += rotation_angle;
+    R[0] += rotation_angle;
 
   if (y)
-    T[1] += rotation_angle;
+    R[1] += rotation_angle;
 
   if (z)
-    T[2] += rotation_angle;
+    R[2] += rotation_angle;
 }
 void Transformation::increase_scaling(float scaling_factor, bool x, bool y,
                                       bool z) {
 
   if (x)
-    T[0] += scaling_factor;
+    S[0] += scaling_factor;
 
   if (y)
-    T[1] += scaling_factor;
+    S[1] += scaling_factor;
 
   if (z)
-    T[2] += scaling_factor;
+    S[2] += scaling_factor;
 }
 
 void Transformation::calculate_matrix() {
@@ -125,10 +125,10 @@ void Transformation::calculate_matrix() {
 
   float temp_result[4 * 4];
 
-  Matrix_multiplication(translation, scaling, 4, 4, 4, 4, temp_result);
-  Matrix_multiplication(temp_result, rotationZ, 4, 4, 4, 4, final_matrix);
-  Matrix_multiplication(final_matrix, rotationY, 4, 4, 4, 4, temp_result);
-  Matrix_multiplication(temp_result, rotationX, 4, 4, 4, 4, final_matrix);
+  Matrix_multiplication(rotationX, scaling, 4, 4, 4, 4, temp_result);
+  Matrix_multiplication(rotationY, temp_result, 4, 4, 4, 4, final_matrix);
+  Matrix_multiplication(rotationZ, final_matrix, 4, 4, 4, 4, temp_result);
+  Matrix_multiplication(translation, temp_result, 4, 4, 4, 4, final_matrix);
 }
 
 void Transformation::print_final() {
